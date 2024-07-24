@@ -16,7 +16,7 @@ public class ClienteService {
    private ClienteRepository repository;
 
    @Autowired
-   private EnderecoClienteRepository enderecoClienterepository;
+   private EnderecoClienteRepository enderecoClienteRepository;
 
    @Transactional
    public Cliente save(Cliente cliente) {
@@ -64,7 +64,7 @@ public class ClienteService {
     @Transactional
    public EnderecoCliente adicionarEnderecoCliente(Long clienteId, EnderecoCliente endereco) {
 
-       Cliente cliente = this.findById(clienteId);
+       Cliente cliente = repository.findById(clienteId).get();
       
        //Primeiro salva o EnderecoCliente:
 
