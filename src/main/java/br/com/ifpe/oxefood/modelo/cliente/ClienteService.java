@@ -9,26 +9,28 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.oxefood.modelo.produto.Produto;
+
 @Service
 public class ClienteService {
 
-   @Autowired
-   private ClienteRepository repository;
+    @Autowired
+    private ClienteRepository repository;
 
-   @Autowired
-   private EnderecoClienteRepository enderecoClienteRepository;
+    @Autowired
+    private EnderecoClienteRepository enderecoClienteRepository;
 
-   @Transactional
-   public Cliente save(Cliente cliente) {
+    @Transactional
+    public Cliente save(Cliente cliente) {
 
-       cliente.setHabilitado(Boolean.TRUE);
-       cliente.setVersao(1L);
-       cliente.setDataCriacao(LocalDate.now());
-       return repository.save(cliente);
-   }
+        cliente.setHabilitado(Boolean.TRUE);
+        cliente.setVersao(1L);
+        cliente.setDataCriacao(LocalDate.now());
+        return repository.save(cliente);
+    }
 
-   public List<Cliente> listarTodos() {
-  
+    public List<Cliente> listarTodos() {
+
         return repository.findAll();
     }
 
@@ -39,58 +41,58 @@ public class ClienteService {
 
     @Transactional
     public void update(Long id, Cliente clienteAlterado) {
- 
-       Cliente cliente = repository.findById(id).get();
-       cliente.setNome(clienteAlterado.getNome());
-       cliente.setDataNascimento(clienteAlterado.getDataNascimento());
-       cliente.setCpf(clienteAlterado.getCpf());
-       cliente.setFoneCelular(clienteAlterado.getFoneCelular());
-       cliente.setFoneFixo(clienteAlterado.getFoneFixo());
-         
-       cliente.setVersao(cliente.getVersao() + 1);
-       repository.save(cliente);
-   }
-   
-   @Transactional
-   public void delete(Long id) {
 
-       Cliente cliente = repository.findById(id).get();
-       cliente.setHabilitado(Boolean.FALSE);
-       cliente.setVersao(cliente.getVersao() + 1);
+        Cliente cliente = repository.findById(id).get();
+        cliente.setNome(clienteAlterado.getNome());
+        cliente.setDataNascimento(clienteAlterado.getDataNascimento());
+        cliente.setCpf(clienteAlterado.getCpf());
+        cliente.setFoneCelular(clienteAlterado.getFoneCelular());
+        cliente.setFoneFixo(clienteAlterado.getFoneFixo());
 
-       repository.save(cliente);
-   }
+        cliente.setVersao(cliente.getVersao() + 1);
+        repository.save(cliente);
+    }
 
     @Transactional
-   public EnderecoCliente adicionarEnderecoCliente(Long clienteId, EnderecoCliente endereco) {
+    public void delete(Long id) {
 
-       Cliente cliente = repository.findById(clienteId).get();
-      
-       //Primeiro salva o EnderecoCliente:
+        Cliente cliente = repository.findById(id).get();
+        cliente.setHabilitado(Boolean.FALSE);
+        cliente.setVersao(cliente.getVersao() + 1);
 
-       endereco.setCliente(cliente);
-       endereco.setHabilitado(Boolean.TRUE);
-       enderecoClienteRepository.save(endereco);
-      
-       //Depois acrescenta o endereço criado ao cliente e atualiza o cliente:
+        repository.save(cliente);
+    }
 
-       List<EnderecoCliente> listaEnderecoCliente = cliente.getEnderecos();
-      
-       if (listaEnderecoCliente == null) {
-           listaEnderecoCliente = new ArrayList<EnderecoCliente>();
-       }
-      
-       listaEnderecoCliente.add(endereco);
-       cliente.setEnderecos(listaEnderecoCliente);
-       cliente.setVersao(cliente.getVersao() + 1);
-       repository.save(cliente);
-      
-       return endereco;
+    @Transactional
+    public EnderecoCliente adicionarEnderecoCliente(Long clienteId, EnderecoCliente endereco) {
+
+        Cliente cliente = repository.findById(clienteId).get();
+
+        // Primeiro salva o EnderecoCliente:
+
+        endereco.setCliente(cliente);
+        endereco.setHabilitado(Boolean.TRUE);
+        enderecoClienteRepository.save(endereco);
+
+        // Depois acrescenta o endereço criado ao cliente e atualiza o cliente:
+
+        List<EnderecoCliente> listaEnderecoCliente = cliente.getEnderecos();
+
+        if (listaEnderecoCliente == null) {
+            listaEnderecoCliente = new ArrayList<EnderecoCliente>();
+        }
+
+        listaEnderecoCliente.add(endereco);
+        cliente.setEnderecos(listaEnderecoCliente);
+        cliente.setVersao(cliente.getVersao() + 1);
+        repository.save(cliente);
+
+        return endereco;
     }
 
     @Transactional
     public EnderecoCliente atualizarEnderecoCliente(Long id, EnderecoCliente enderecoAlterado) {
- 
+
         EnderecoCliente endereco = enderecoClienteRepository.findById(id).get();
         endereco.setRua(enderecoAlterado.getRua());
         endereco.setNumero(enderecoAlterado.getNumero());
@@ -99,7 +101,7 @@ public class ClienteService {
         endereco.setCidade(enderecoAlterado.getCidade());
         endereco.setEstado(enderecoAlterado.getEstado());
         endereco.setComplemento(enderecoAlterado.getComplemento());
- 
+
         return enderecoClienteRepository.save(endereco);
     }
 
@@ -115,8 +117,30 @@ public class ClienteService {
     cliente.setVersao(cliente.getVersao() + 1);
     repository.save(cliente);
 
+    public List<Produto> filtrar(String codigo, String titulo, Long idCategoria) {
 
-}
+        List<Produto> listaClientes = repository.findAll();
 
- 
+        if ((codigo != null && !"".equals(codigo)) &&
+                (titulo == null || "".equals(nome)) &&
+                (idCategoria == null)) {
+            listaClientes = repository.consultarPorCodigo(codigo);
+        } else if ((codigo == null || "".equals(codigo)) &&
+                (titulo != null && !"".equals(nome)) &&
+                (idCategoria == null)) {
+            listaClientes = repository.consultarPorNome(nome);
+        } else if ((codigo == null || "".equals(codigo)) &&
+                (titulo == null || "".equals(titulo)) &&
+                (idCategoria != null)) {
+            listaClientes = repository.consultarPorCategoria(idCategoria);
+        } else if ((codigo == null || "".equals(codigo)) &&
+                (titulo != null && !"".equals(titulo)) &&
+                (idCategoria != null)) {
+            listaClientes = repository.consultarPorTituloECategoria(titulo, idCategoria);
+        }
+
+        return listaProdutos;
+
+    }
+
 }

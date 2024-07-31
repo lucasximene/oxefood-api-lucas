@@ -36,7 +36,7 @@ public class CategoriaProdutoService {
     public void update(Long id, CategoriaProduto categoriaProdutoAlterado) {
  
        CategoriaProduto categoriaProduto = repository.findById(id).get();
-       categoriaProduto.setDescricao(categoriaProduto.getDescricao());
+       categoriaProduto.setDescricaoCategoria(categoriaProduto.getDescricaoCategoria());
          
        categoriaProduto.setVersao(categoriaProduto.getVersao() + 1);
        repository.save(categoriaProduto);
