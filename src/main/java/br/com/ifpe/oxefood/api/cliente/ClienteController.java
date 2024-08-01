@@ -124,3 +124,4 @@ public class ClienteController {
 
        return clienteService.filtrar(codigo, titulo, idCategoria);
 }
+}

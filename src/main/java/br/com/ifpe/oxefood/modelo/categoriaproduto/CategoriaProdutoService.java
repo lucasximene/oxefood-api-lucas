@@ -10,20 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoriaProdutoService {
 
-   @Autowired
-   private CategoriaProdutoRepository repository;
+    @Autowired
+    private CategoriaProdutoRepository repository;
 
-   @Transactional
-   public CategoriaProduto save(CategoriaProduto categoriaProduto) {
+    @Transactional
+    public CategoriaProduto save(CategoriaProduto categoriaProduto) {
+        categoriaProduto.setHabilitado(Boolean.TRUE);
+        categoriaProduto.setVersao(1L);
+        categoriaProduto.setDataCriacao(LocalDate.now());
+        return repository.save(categoriaProduto);
+    }
 
-       categoriaProduto.setHabilitado(Boolean.TRUE);
-       categoriaProduto.setVersao(1L);
-       categoriaProduto.setDataCriacao(LocalDate.now());
-       return repository.save(categoriaProduto);
-   }
+    public List<CategoriaProduto> listarTodos() {
 
-   public List<CategoriaProduto> listarTodos() {
-  
         return repository.findAll();
     }
 
@@ -34,22 +33,21 @@ public class CategoriaProdutoService {
 
     @Transactional
     public void update(Long id, CategoriaProduto categoriaProdutoAlterado) {
- 
-       CategoriaProduto categoriaProduto = repository.findById(id).get();
-       categoriaProduto.setDescricaoCategoria(categoriaProduto.getDescricaoCategoria());
-         
-       categoriaProduto.setVersao(categoriaProduto.getVersao() + 1);
-       repository.save(categoriaProduto);
-   }
-   
-   @Transactional
-   public void delete(Long id) {
 
-       CategoriaProduto categoriaProduto = repository.findById(id).get();
-       categoriaProduto.setHabilitado(Boolean.FALSE);
-       categoriaProduto.setVersao(categoriaProduto.getVersao() + 1);
+        CategoriaProduto categoriaProduto = repository.findById(id).get();
+        categoriaProduto.setDescricaoCategoria(categoriaProdutoAlterado.getDescricaoCategoria());
+        categoriaProduto.setVersao(categoriaProduto.getVersao() + 1);
+        repository.save(categoriaProduto);
+    }
 
-       repository.save(categoriaProduto);
-   }
+    @Transactional
+    public void delete(Long id) {
+
+        CategoriaProduto categoriaProduto = repository.findById(id).get();
+        categoriaProduto.setHabilitado(Boolean.FALSE);
+        categoriaProduto.setVersao(categoriaProduto.getVersao() + 1);
+
+        repository.save(categoriaProduto);
+    }
 
 }
