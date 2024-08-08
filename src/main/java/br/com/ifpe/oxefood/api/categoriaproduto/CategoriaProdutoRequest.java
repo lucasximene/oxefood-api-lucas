@@ -11,15 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoriaProdutoRequest {
+    
+    private String descricao;
 
-    private String descricaoCategoria;
 
-    public CategoriaProduto build() {
-
+    public CategoriaProduto build(){
         return CategoriaProduto.builder()
-                .descricaoCategoria(descricaoCategoria)
-                .build();
+            .descricao(descricao)
+            .build();
     }
-
-
 }

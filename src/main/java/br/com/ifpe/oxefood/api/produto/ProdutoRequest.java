@@ -1,6 +1,10 @@
 package br.com.ifpe.oxefood.api.produto;
 
 import br.com.ifpe.oxefood.modelo.produto.Produto;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,29 +16,37 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProdutoRequest {
 
- private Long idCategoria;
+  @NotNull
+  private Long idCategoria;
 
- private String codigo;
+  @NotBlank(message= "O codigo é de preenchimento obrigatório")
+  private String codigo;
 
- private String titulo;
+  @NotBlank(message= "O titulo é de preenchimento obrigatório")
+  private String titulo;
 
- private String descricao;
+  @NotBlank(message= "A descrição é de preenchimento obrigatório")
+  private String descricao;
 
- private Double valorUnitario;
+  @Min(value=100, message= "O valor minimo é 100 reais")
+  private Double valorUnitario;
 
- private Integer tempoEntregaMinimo;
+  @Max(value= 30, message = "O valor de entrega mínimo é de 30 minutos")
+  private Integer tempoEntregaMinimo;
 
- private Integer tempoEntregaMaximo;
+  
+  @Max(value= 100, message = "O valor de entrega máximo é de 100 minutos")
+  private Integer tempoEntregaMaximo;
 
-   public Produto build() {
+  public Produto build() {
 
-       return Produto.builder()
-           .codigo(codigo)
-           .titulo(titulo)
-           .descricao(descricao)
-           .valorUnitario(valorUnitario)
-           .tempoEntregaMinimo(tempoEntregaMinimo)
-	         .tempoEntregaMaximo(tempoEntregaMaximo)
-           .build();
-   }
+    return Produto.builder()
+        .codigo(codigo)
+        .titulo(titulo)
+        .descricao(descricao)
+        .valorUnitario(valorUnitario)
+        .tempoEntregaMinimo(tempoEntregaMinimo)
+        .tempoEntregaMaximo(tempoEntregaMaximo)
+        .build();
+  }
 }

@@ -13,19 +13,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "CategoriaProduto")
+@Table(name="CategoriaProduto")
 @SQLRestriction("habilitado = true")
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaProduto extends EntidadeAuditavel  {
-  
-   @Column
-   private String descricaoCategoria;
+public class CategoriaProduto extends EntidadeAuditavel{
 
-/* 
-   Para colocar no Postman
-*/
+    @Column
+    private String descricao;
+
 }

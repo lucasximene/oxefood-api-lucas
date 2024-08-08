@@ -8,6 +8,7 @@ import br.com.ifpe.oxefood.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,73 +23,51 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Entregador extends EntidadeAuditavel  {
-
-   @Column
+public class Entregador extends EntidadeAuditavel {
+   @Column(nullable = false, length = 30)
    private String nome;
 
-   @Column
+   @Column(nullable = false)
    private String cpf;
 
-   @Column
-   private String rg;
-
-   @Column
+   @Column(nullable = false)
    private LocalDate dataNascimento;
 
-   @Column
+   @Column(nullable = false)
+   @Pattern(regexp = "^81[0-9]{8}$", message = "O telefone deve começar com o prefixo 81.")
    private String foneCelular;
 
    @Column
    private String foneFixo;
 
    @Column
-   private int qtdEntregas;
+   private int qtdEntregasRealizadas;
 
-   @Column
-   private double valorFrete;
+   @Column(nullable = false)
+   private Double valorFrete;
 
-   @Column
-   private String rua;
+   @Column(nullable = false, length = 30)
+   private String enderecoRua;
 
-   @Column
-   private String numero;
+   @Column(nullable = false)
+   private String enderecoNumero;
 
-   @Column
-   private String bairro;
+   @Column(nullable = false, length = 30)
+   private String enderecoBairro;
 
-   @Column
-   private String cidade;
+   @Column(nullable = false, length = 30)
+   private String enderecoCidade;
 
-   @Column
-   private String cep;
+   @Column(nullable = false)
+   private String enderecoCep;
 
-   @Column
-   private String uf;
+   @Column(nullable = false, length = 5)
+   private String enderecoUf;
 
-   @Column
-   private String complemento;
+   @Column(nullable = false, length = 30)
+   private String enderecoCompleto;
 
-   @Column
-   private Boolean ativo;
+   @Column(nullable = false)
+   private Boolean ativo; 
 
-/* 
-   Para colocar no Postman
-   "nome": "Heloisa",
-   "cpf":"123.456.789-10",
-   "rg":"123456",
-   "dataNascimento":"13/12/2001",
-   "foneCelular":"81954545454",
-   "foneFixo":"8154545454",
-   "qtdEntregas": 2,
-   "valorFrete": 3.50,
-   "rua":"rua da esquina",
-   "numero":"14",
-   "bairro":"Centro",
-   "cidade":"jab",
-   "cep":"5411",
-   "uf":"PE",
-   "complemento":"funer",
-   "ativo":true
-*/
 }

@@ -25,50 +25,41 @@ import jakarta.validation.Valid;
 @CrossOrigin
 
 public class CategoriaProdutoController {
+    
     @Autowired
     private CategoriaProdutoService categoriaProdutoService;
 
-    @Operation(summary = "Serviço responsável por salvar uma categoria de produto no sistema.")
-
+    @Operation(summary = "Serviço para salvar uma categoria de produto no sistema.", description = "Endpoint responsável por inserir uma categoria de produto no sistema.")
     @PostMapping
     public ResponseEntity<CategoriaProduto> save(@RequestBody @Valid CategoriaProdutoRequest request) {
-
-        CategoriaProduto categoriaProdutoNovo = request.build();
-        CategoriaProduto categoriaProduto = categoriaProdutoService.save(categoriaProdutoNovo);
-        return new ResponseEntity<CategoriaProduto>(categoriaProduto, HttpStatus.CREATED);
+       CategoriaProduto categoriaProdutoNovo = request.build();
+       CategoriaProduto categoriaProduto = categoriaProdutoService.save(categoriaProdutoNovo);
+       return new ResponseEntity<CategoriaProduto>(categoriaProduto, HttpStatus.CREATED);
+        
     }
-
-    @Operation(summary = "Serviço responsável por listar todas as categorias de produtos do sistema.")
-
+    @Operation(summary = "Serviço para listar categorias de produtos.", description = "Endpoint responsável por listar todas categorias de produtos no sistema.")
     @GetMapping
-    public List<CategoriaProduto> listarTodos() {
+    public List<CategoriaProduto> listarTodos(){
         return categoriaProdutoService.listarTodos();
-    }
-
-    @Operation(summary = "Serviço responsável por listar uma categoria de produto especifico do sistema.")
-
+        
+    }    
+    @Operation(summary = "Serviço para listar uma categoria de produto pelo id.", description = "Endpoint responsável por listar uma categoria de produto no sistema pelo seu id .")
     @GetMapping("/{id}")
-    public CategoriaProduto obterPorID(@PathVariable Long id) {
-        return categoriaProdutoService.obterPorID(id);
+    public CategoriaProduto obterPorId(@PathVariable Long id){
+        return categoriaProdutoService.obterPorId(id);
+
     }
 
-    @Operation(summary = "Serviço responsável por alterar dados de uma categoria de produto especifico do sistema.")
-
+    @Operation(summary = "Serviço para atualizar uma categoria de produto.", description = "Endpoint responsável por atualizar uma categoria de produto no sistema.")
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id,
-            @RequestBody CategoriaProdutoRequest request) {
-
-        categoriaProdutoService.update(id, request.build());
+    public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id, @RequestBody CategoriaProdutoRequest request){
+        categoriaProdutoService.update(id,request.build());
         return ResponseEntity.ok().build();
     }
-
-    @Operation(summary = "Serviço responsável por excluir uma categoria de produto especifico do sistema.")
-
+    @Operation(summary = "Serviço para deletar uma categoria de produto.", description = "Endpoint responsável por deletar uma categoria de produto no sistema.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-
+    public void delete(@PathVariable("id")Long id){
         categoriaProdutoService.delete(id);
-        return ResponseEntity.ok().build();
     }
 
 
