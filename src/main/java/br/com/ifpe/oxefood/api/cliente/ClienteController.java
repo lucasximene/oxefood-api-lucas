@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.oxefood.modelo.acesso.UsuarioService;
 import br.com.ifpe.oxefood.modelo.cliente.Cliente;
 import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 import br.com.ifpe.oxefood.modelo.cliente.EnderecoCliente;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,14 +29,19 @@ import jakarta.validation.Valid;
 @CrossOrigin
 
 public class ClienteController {
+
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
+
     @Operation(summary = "Serviço para salvar um cliente no sistema.", description = "Endpoint responsável por inserir um cliente no sistema.")
     @PostMapping
-    public ResponseEntity<Cliente> save(@RequestBody @Valid ClienteRequest request) {
+    public ResponseEntity<Cliente> save(@RequestBody @Valid ClienteRequest clienterequest, HttpServletRequest request) {
 
-        Cliente cliente = clienteService.save(request.build());
+        Cliente cliente = clienteService.save(clienterequest.build(), usuarioService.obterUsuarioLogado(request));
         return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
     }
 
@@ -52,9 +59,9 @@ public class ClienteController {
 
     @Operation(summary = "Serviço para atualizar um cliente .", description = "Endpoint responsável por atualizar um cliente no sistema.")
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> update(@PathVariable("id") Long id, @RequestBody ClienteRequest request) {
+    public ResponseEntity<Cliente> update(@PathVariable("id") Long id, @RequestBody ClienteRequest clienterequest, HttpServletRequest request) {
 
-        clienteService.update(id, request.build());
+        clienteService.update(id, clienterequest.build(), usuarioService.obterUsuarioLogado(request));
         return ResponseEntity.ok().build();
     }
 
