@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.oxefood.modelo.acesso.Usuario;
 import br.com.ifpe.oxefood.modelo.acesso.UsuarioService;
+import br.com.ifpe.oxefood.modelo.mensagens.EmailService;
 import br.com.ifpe.oxefood.util.exception.ClienteException;
 import br.com.ifpe.oxefood.util.exception.EntidadeNaoEncontradaException;
 
@@ -20,12 +21,14 @@ public class ClienteService {
     @Autowired
     private UsuarioService usuarioService;
 
-
     @Autowired
     private ClienteRepository repository;
 
     @Autowired
     private EnderecoClienteRepository enderecoClienteRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     public Cliente save(Cliente cliente, Usuario usuarioLogado) {
@@ -42,6 +45,8 @@ public class ClienteService {
         cliente.setDataCriacao(LocalDate.now());
         cliente.setCriadoPor(usuarioLogado);
 
+        //emailService.enviarEmailConfirmacaoCadastroCliente(clienteSalvo);
+        
         return repository.save(cliente);
 }
 
